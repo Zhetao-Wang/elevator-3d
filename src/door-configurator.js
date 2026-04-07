@@ -7,6 +7,7 @@ import { DoorFrame } from './components/DoorFrame.js';
 import { InnerFrame } from './components/InnerFrame.js';
 import { DoorLeaf } from './components/DoorLeaf.js';
 import { FloorDisplay } from './components/FloorDisplay.js';
+import { CallBox } from './components/CallBox.js';
 
 // EventBus 实现
 class EventBus {
@@ -98,7 +99,7 @@ export class DoorConfigurator {
             0.1,
             100
         );
-        this.camera.position.set(0, 1.5, 5);
+        this.camera.position.set(0, 0.5, 5);
 
         // 渲染器
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -108,10 +109,10 @@ export class DoorConfigurator {
         this.renderer.toneMappingExposure = 0.8;
         this.container.appendChild(this.renderer.domElement);
 
-        // 控制器
+        // 控制器 - 目标设为大门套中心 (高度2.3m/2 = 1.15m)
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
-        this.controls.target.set(0, 1, 0);
+        this.controls.target.set(0, 0, 0);
 
         // 环境贴图
         const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
@@ -133,7 +134,7 @@ export class DoorConfigurator {
      * 创建所有组件
      */
     _createComponents() {
-        // 大门套
+        // 大门套 - 作为基准位置
         const doorFrame = new DoorFrame(this.scene, this.materialLibrary);
         doorFrame.create();
         this.components.set('doorFrame', doorFrame);
@@ -152,6 +153,11 @@ export class DoorConfigurator {
         const floorDisplay = new FloorDisplay(this.scene);
         floorDisplay.create();
         this.components.set('floorDisplay', floorDisplay);
+
+        // 召唤盒
+        const callBox = new CallBox(this.scene, this.materialLibrary);
+        callBox.create();
+        this.components.set('callBox', callBox);
 
         // 监听组件选择事件
         this.components.forEach((component, key) => {

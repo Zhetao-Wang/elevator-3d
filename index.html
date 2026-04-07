@@ -167,6 +167,24 @@
             <label>型号选择</label>
             <div class="model-buttons" id="model-buttons"></div>
         </div>
+
+        <!-- 按钮型号选择 -->
+        <div class="config-section" id="button-model-section" style="display: none;">
+            <label>按钮型号</label>
+            <div class="model-buttons" id="button-model-buttons"></div>
+        </div>
+
+        <!-- 按钮颜色选择 -->
+        <div class="config-section" id="button-color-section" style="display: none;">
+            <label>按钮颜色</label>
+            <div class="model-buttons" id="button-color-buttons"></div>
+        </div>
+
+        <!-- 显示器型号选择 -->
+        <div class="config-section" id="display-model-section" style="display: none;">
+            <label>显示器型号</label>
+            <div class="model-buttons" id="display-model-buttons"></div>
+        </div>
     </div>
 
     <!-- 操作提示 -->
@@ -188,6 +206,12 @@
         const materialGrid = document.getElementById('material-grid');
         const modelSection = document.getElementById('model-section');
         const modelButtons = document.getElementById('model-buttons');
+        const buttonModelSection = document.getElementById('button-model-section');
+        const buttonModelButtons = document.getElementById('button-model-buttons');
+        const buttonColorSection = document.getElementById('button-color-section');
+        const buttonColorButtons = document.getElementById('button-color-buttons');
+        const displayModelSection = document.getElementById('display-model-section');
+        const displayModelButtons = document.getElementById('display-model-buttons');
 
         // 材质颜色映射
         const materialColors = {
@@ -214,14 +238,41 @@
             panel.classList.add('active');
 
             // 渲染材质选项
-            renderMaterialOptions(data.component);
+            if (data.configurable.includes('material')) {
+                renderMaterialOptions(data.component);
+                materialGrid.parentElement.style.display = 'block';
+            } else {
+                materialGrid.parentElement.style.display = 'none';
+            }
 
-            // 渲染型号选项（如果有）
+            // 渲染型号选项（层门）
             if (data.configurable.includes('model')) {
                 renderModelOptions(data.component);
                 modelSection.style.display = 'block';
             } else {
                 modelSection.style.display = 'none';
+            }
+
+            // 渲染召唤盒特有选项
+            if (data.configurable.includes('buttonModel')) {
+                renderButtonModelOptions(data.component);
+                buttonModelSection.style.display = 'block';
+            } else {
+                buttonModelSection.style.display = 'none';
+            }
+
+            if (data.configurable.includes('buttonColor')) {
+                renderButtonColorOptions(data.component);
+                buttonColorSection.style.display = 'block';
+            } else {
+                buttonColorSection.style.display = 'none';
+            }
+
+            if (data.configurable.includes('displayModel')) {
+                renderDisplayModelOptions(data.component);
+                displayModelSection.style.display = 'block';
+            } else {
+                displayModelSection.style.display = 'none';
             }
         });
 
@@ -274,12 +325,95 @@
 
                 btn.addEventListener('click', () => {
                     component.setModel(opt.key);
-
-                    document.querySelectorAll('.model-btn').forEach(b => b.classList.remove('active'));
+                    btn.parentElement.querySelectorAll('.model-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                 });
 
                 modelButtons.appendChild(btn);
+            });
+        }
+
+        // 渲染按钮型号选项
+        function renderButtonModelOptions(component) {
+            buttonModelButtons.innerHTML = '';
+
+            if (!component.getButtonModelOptions) return;
+
+            const options = component.getButtonModelOptions();
+            const currentConfig = component.getConfig();
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'model-btn';
+                btn.textContent = opt.name;
+
+                if (currentConfig.buttonModel === opt.key) {
+                    btn.classList.add('active');
+                }
+
+                btn.addEventListener('click', () => {
+                    component.setButtonModel(opt.key);
+                    btn.parentElement.querySelectorAll('.model-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+
+                buttonModelButtons.appendChild(btn);
+            });
+        }
+
+        // 渲染按钮颜色选项
+        function renderButtonColorOptions(component) {
+            buttonColorButtons.innerHTML = '';
+
+            if (!component.getButtonColorOptions) return;
+
+            const options = component.getButtonColorOptions();
+            const currentConfig = component.getConfig();
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'model-btn';
+                btn.textContent = opt.name;
+
+                if (currentConfig.buttonColor === opt.key) {
+                    btn.classList.add('active');
+                }
+
+                btn.addEventListener('click', () => {
+                    component.setButtonColor(opt.key);
+                    btn.parentElement.querySelectorAll('.model-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+
+                buttonColorButtons.appendChild(btn);
+            });
+        }
+
+        // 渲染显示器型号选项
+        function renderDisplayModelOptions(component) {
+            displayModelButtons.innerHTML = '';
+
+            if (!component.getDisplayModelOptions) return;
+
+            const options = component.getDisplayModelOptions();
+            const currentConfig = component.getConfig();
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'model-btn';
+                btn.textContent = opt.name;
+
+                if (currentConfig.displayModel === opt.key) {
+                    btn.classList.add('active');
+                }
+
+                btn.addEventListener('click', () => {
+                    component.setDisplayModel(opt.key);
+                    btn.parentElement.querySelectorAll('.model-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+
+                displayModelButtons.appendChild(btn);
             });
         }
 

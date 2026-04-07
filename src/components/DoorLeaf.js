@@ -12,9 +12,9 @@ export class DoorLeaf extends BaseComponent {
             standard: {
                 name: '标准型',
                 width: 1.7,
-                height: 2.05,
+                height: 2.4,
                 doorWidth: 0.845,
-                doorHeight: 2.05,
+                doorHeight: 2.4,
                 thickness: 0.05,
                 gap: 0.01
             }

@@ -8,7 +8,7 @@ export class InnerFrame extends BaseComponent {
         this.materialLibrary = materialLibrary;
         this.dimensions = {
             width: 1.9,
-            height: 2.15,
+            height: 2.5,
             depth: 0.1,
             wallThickness: 0.06
         };

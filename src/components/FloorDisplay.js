@@ -86,7 +86,7 @@ export class FloorDisplay extends BaseComponent {
         this.displayGroup.add(this.screenMesh);
 
         // 设置位置（门楣上方，与门框留有空隙）
-        this.displayGroup.position.set(0, 1.15, 0.08);
+        this.displayGroup.position.set(0, 1.3, 0.08);
 
         // 添加到场景
         this.scene.add(this.displayGroup);

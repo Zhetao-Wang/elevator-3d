@@ -163,7 +163,83 @@
     "colors": {
       "white": { "name": "白光", "hex": 16777215, "emissive": 16777215 },
       "red": { "name": "红光", "hex": 16724736, "emissive": 16711680 },
-      "blue": { "name": "蓝光", "hex": 35071, "emissive": 35071 }
+      "blue": { "name": "蓝光", "hex": 35071, "emissive": 35071 },
+      "green": { "name": "绿光", "hex": 65280, "emissive": 65280 },
+      "orange": { "name": "橙光", "hex": 16753920, "emissive": 16753920 }
+    }
+  },
+  "cabin": {
+    "models": {
+      "standard": {
+        "id": "standard",
+        "name": "标准轿厢",
+        "width": 2.0,
+        "depth": 2.0,
+        "height": 2.4,
+        "description": "标准客梯轿厢尺寸"
+      }
+    },
+    "ceiling": {
+      "name": "吊顶",
+      "configurable": ["model", "material"],
+      "models": {
+        "flat": { "name": "平顶", "type": "flat" },
+        "recessed": { "name": " recessed灯吊顶", "type": "recessed" },
+        "luxury": { "name": "豪华吊顶", "type": "luxury" }
+      },
+      "defaultModel": "flat",
+      "defaultMaterial": "st-hairline"
+    },
+    "walls": {
+      "front": {
+        "name": "前壁",
+        "configurable": ["material"],
+        "defaultMaterial": "st-hairline"
+      },
+      "sideFront": {
+        "name": "侧前壁",
+        "configurable": ["material"],
+        "defaultMaterial": "st-hairline"
+      },
+      "sideMiddle": {
+        "name": "侧中壁",
+        "configurable": ["material"],
+        "defaultMaterial": "st-mirror"
+      },
+      "sideRear": {
+        "name": "侧后壁",
+        "configurable": ["material"],
+        "defaultMaterial": "st-hairline"
+      },
+      "rearSide": {
+        "name": "后侧边",
+        "configurable": ["material"],
+        "defaultMaterial": "st-hairline"
+      },
+      "rearMiddle": {
+        "name": "后中壁",
+        "configurable": ["material"],
+        "defaultMaterial": "st-mirror"
+      }
+    },
+    "controlPanel": {
+      "name": "操纵箱",
+      "configurable": ["model", "material", "buttonModel", "buttonColor", "displayModel"],
+      "models": {
+        "standard": { "name": "标准型", "width": 0.3, "height": 1.2 },
+        "wide": { "name": "加宽型", "width": 0.4, "height": 1.2 },
+        "compact": { "name": "紧凑型", "width": 0.25, "height": 1.0 }
+      },
+      "defaultModel": "standard",
+      "defaultMaterial": "st-hairline",
+      "defaultButtonModel": "circle",
+      "defaultButtonColor": "white",
+      "defaultDisplayModel": "seg-white"
+    },
+    "floor": {
+      "name": "地板",
+      "configurable": ["material"],
+      "defaultMaterial": "bk-hairline"
     }
   }
 }

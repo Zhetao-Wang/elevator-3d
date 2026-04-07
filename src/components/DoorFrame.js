@@ -8,7 +8,7 @@ export class DoorFrame extends BaseComponent {
         this.materialLibrary = materialLibrary;
         this.dimensions = {
             width: 2.2,
-            height: 2.3,
+            height: 2.7,
             depth: 0.15,
             wallThickness: 0.08
         };
