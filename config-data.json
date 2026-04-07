@@ -1,0 +1,169 @@
+{
+  "materials": {
+    "st-hairline": {
+      "name": "发纹不锈钢",
+      "nameEn": "Stainless Steel Hairline",
+      "color": "#aaaaaa",
+      "hex": 11184810,
+      "metalness": 1.0,
+      "roughness": 0.35,
+      "category": "stainless",
+      "preview": "/assets/previews/st-hairline.jpg"
+    },
+    "st-mirror": {
+      "name": "镜面不锈钢",
+      "nameEn": "Stainless Steel Mirror",
+      "color": "#cccccc",
+      "hex": 13421772,
+      "metalness": 1.0,
+      "roughness": 0.05,
+      "category": "stainless",
+      "preview": "/assets/previews/st-mirror.jpg"
+    },
+    "ti-hairline": {
+      "name": "钛金发纹",
+      "nameEn": "Titanium Gold Hairline",
+      "color": "#c5a059",
+      "hex": 12949977,
+      "metalness": 1.0,
+      "roughness": 0.35,
+      "category": "titanium",
+      "preview": "/assets/previews/ti-hairline.jpg"
+    },
+    "ti-mirror": {
+      "name": "钛金镜面",
+      "nameEn": "Titanium Gold Mirror",
+      "color": "#d4af37",
+      "hex": 13938487,
+      "metalness": 1.0,
+      "roughness": 0.05,
+      "category": "titanium",
+      "preview": "/assets/previews/ti-mirror.jpg"
+    },
+    "bk-hairline": {
+      "name": "黑钛发纹",
+      "nameEn": "Black Titanium Hairline",
+      "color": "#222222",
+      "hex": 2236962,
+      "metalness": 1.0,
+      "roughness": 0.35,
+      "category": "black",
+      "preview": "/assets/previews/bk-hairline.jpg"
+    },
+    "bk-mirror": {
+      "name": "黑钛镜面",
+      "nameEn": "Black Titanium Mirror",
+      "color": "#333333",
+      "hex": 3355443,
+      "metalness": 1.0,
+      "roughness": 0.05,
+      "category": "black",
+      "preview": "/assets/previews/bk-mirror.jpg"
+    }
+  },
+  "doorModels": {
+    "standard": {
+      "id": "standard",
+      "name": "标准型",
+      "width": 1.7,
+      "height": 2.1,
+      "doorWidth": 0.85,
+      "doorHeight": 2.05,
+      "thickness": 0.05,
+      "description": "适用于标准电梯井道"
+    },
+    "wide": {
+      "id": "wide",
+      "name": "加宽型",
+      "width": 2.0,
+      "height": 2.1,
+      "doorWidth": 1.0,
+      "doorHeight": 2.05,
+      "thickness": 0.05,
+      "description": "适用于病床电梯、货梯"
+    }
+  },
+  "displayModels": {
+    "seg-white": {
+      "id": "seg-white",
+      "name": "4.3寸黑底白字段码",
+      "type": "white-seg",
+      "size": "4.3寸",
+      "bgColor": "#000000",
+      "textColor": "#ffffff",
+      "width": 0.4,
+      "height": 0.2,
+      "description": "经典段码显示，清晰易读"
+    },
+    "dot-red": {
+      "id": "dot-red",
+      "name": "4.3寸红色点阵",
+      "type": "dot-red",
+      "size": "4.3寸",
+      "bgColor": "#000000",
+      "textColor": "#ff0000",
+      "width": 0.4,
+      "height": 0.2,
+      "description": "点阵显示，支持字符"
+    }
+  },
+  "components": {
+    "doorFrame": {
+      "name": "大门套",
+      "configurable": ["material"],
+      "defaultMaterial": "st-hairline",
+      "dimensions": {
+        "width": 2.2,
+        "height": 2.3,
+        "depth": 0.15
+      }
+    },
+    "innerFrame": {
+      "name": "小门套",
+      "configurable": ["material"],
+      "defaultMaterial": "st-hairline",
+      "dimensions": {
+        "width": 1.9,
+        "height": 2.15,
+        "depth": 0.1
+      }
+    },
+    "doorLeaf": {
+      "name": "层门",
+      "configurable": ["model", "material"],
+      "defaultModel": "standard",
+      "defaultMaterial": "st-hairline",
+      "doorGap": 0.005
+    },
+    "floorDisplay": {
+      "name": "显示器",
+      "configurable": ["model"],
+      "defaultModel": "seg-white",
+      "position": "above_door"
+    },
+    "callBox": {
+      "name": "召唤盒",
+      "configurable": ["buttonModel", "buttonColor", "displayModel"],
+      "defaultButtonModel": "circle",
+      "defaultButtonColor": "white",
+      "defaultDisplayModel": "seg-white"
+    }
+  },
+  "buttonOptions": {
+    "models": {
+      "circle": {
+        "name": "圆形按钮",
+        "geometry": "cylinder"
+      },
+      "square": {
+        "name": "方形按钮",
+        "geometry": "box"
+      }
+    },
+    "colors": {
+      "white": { "name": "白光", "hex": 16777215, "emissive": 16777215 },
+      "red": { "name": "红光", "hex": 16724736, "emissive": 16711680 },
+      "blue": { "name": "蓝光", "hex": 35071, "emissive": 35071 }
+    }
+  }
+}

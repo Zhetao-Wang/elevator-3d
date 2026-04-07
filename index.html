@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D 电梯门配置器</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #1a1a1a;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* 右侧面板 */
+        #config-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        #config-panel.active {
+            display: block;
+        }
+
+        #config-panel h3 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .config-section {
+            margin-bottom: 15px;
+        }
+
+        .config-section label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        /* 材质卡片网格 */
+        .material-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .material-card {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .material-card:hover {
+            transform: scale(1.05);
+        }
+
+        .material-card.active {
+            border-color: #007aff;
+            box-shadow: 0 0 0 2px rgba(0,122,255,0.3);
+        }
+
+        /* 型号选择按钮 */
+        .model-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .model-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .model-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .model-btn.active {
+            background: #007aff;
+            color: #fff;
+            border-color: #007aff;
+        }
+
+        /* 提示信息 */
+        #hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            pointer-events: none;
+        }
+
+        /* 组件标题 */
+        #component-title {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+
+        #component-title.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D 画布容器 -->
+    <div id="canvas-container"></div>
+
+    <!-- 当前选中组件名称 -->
+    <div id="component-title">点击选择组件</div>
+
+    <!-- 右侧面板 -->
+    <div id="config-panel">
+        <h3 id="panel-title">配置</h3>
+
+        <!-- 材质选择 -->
+        <div class="config-section" id="material-section">
+            <label>材质选择</label>
+            <div class="material-grid" id="material-grid"></div>
+        </div>
+
+        <!-- 型号选择 -->
+        <div class="config-section" id="model-section" style="display: none;">
+            <label>型号选择</label>
+            <div class="model-buttons" id="model-buttons"></div>
+        </div>
+    </div>
+
+    <!-- 操作提示 -->
+    <div id="hint">🖱️ 点击门组件进行配置 | 拖拽旋转 | 滚轮缩放</div>
+
+    <script type="module">
+        import { DoorConfigurator } from '/src/door-configurator.js';
+        import configData from '/config-data.json';
+
+        // 初始化配置器
+        const container = document.getElementById('canvas-container');
+        const configurator = new DoorConfigurator(container);
+        await configurator.initialize(configData);
+
+        // UI 元素
+        const panel = document.getElementById('config-panel');
+        const panelTitle = document.getElementById('panel-title');
+        const componentTitle = document.getElementById('component-title');
+        const materialGrid = document.getElementById('material-grid');
+        const modelSection = document.getElementById('model-section');
+        const modelButtons = document.getElementById('model-buttons');
+
+        // 材质颜色映射
+        const materialColors = {
+            'st-hairline': '#aaaaaa',
+            'st-mirror': '#cccccc',
+            'ti-hairline': '#c5a059',
+            'ti-mirror': '#d4af37',
+            'bk-hairline': '#222222',
+            'bk-mirror': '#333333'
+        };
+
+        let currentComponent = null;
+
+        // 监听组件选择事件
+        window.EventBus.on('component:selected', (data) => {
+            currentComponent = data.component;
+
+            // 显示组件名称
+            componentTitle.textContent = data.component.name;
+            componentTitle.classList.add('active');
+
+            // 更新面板
+            panelTitle.textContent = `${data.component.name} 配置`;
+            panel.classList.add('active');
+
+            // 渲染材质选项
+            renderMaterialOptions(data.component);
+
+            // 渲染型号选项（如果有）
+            if (data.configurable.includes('model')) {
+                renderModelOptions(data.component);
+                modelSection.style.display = 'block';
+            } else {
+                modelSection.style.display = 'none';
+            }
+        });
+
+        // 渲染材质选项
+        function renderMaterialOptions(component) {
+            materialGrid.innerHTML = '';
+            const materials = configData.materials;
+            const currentConfig = component.getConfig();
+
+            Object.entries(materials).forEach(([key, mat]) => {
+                const card = document.createElement('div');
+                card.className = 'material-card';
+                card.style.background = materialColors[key] || mat.color;
+                card.textContent = mat.name;
+
+                if (currentConfig.material === key) {
+                    card.classList.add('active');
+                }
+
+                card.addEventListener('click', () => {
+                    // 更新材质
+                    component.applyMaterial(key);
+
+                    // 更新 UI
+                    document.querySelectorAll('.material-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                });
+
+                materialGrid.appendChild(card);
+            });
+        }
+
+        // 渲染型号选项
+        function renderModelOptions(component) {
+            modelButtons.innerHTML = '';
+
+            if (!component.getModelOptions) return;
+
+            const options = component.getModelOptions();
+            const currentConfig = component.getConfig();
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'model-btn';
+                btn.textContent = opt.name;
+
+                if (currentConfig.model === opt.key) {
+                    btn.classList.add('active');
+                }
+
+                btn.addEventListener('click', () => {
+                    component.setModel(opt.key);
+
+                    document.querySelectorAll('.model-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+
+                modelButtons.appendChild(btn);
+            });
+        }
+
+        // 点击空白处关闭面板
+        container.addEventListener('click', (e) => {
+            if (e.target === container || e.target === container.querySelector('canvas')) {
+                // 保留面板显示，只更新选中状态
+            }
+        });
+    </script>
+</body>
+</html>
