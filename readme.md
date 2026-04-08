@@ -1,7 +1,3 @@
-
-
-[中文](README.md) | [English](README_EN.md)
-
 <h1 align="center">3D 电梯配置器</h1>
 
 <p align="center">
@@ -9,13 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="#features"><img src="https://img.shields.io/badge/Features-%E5%B1%82%E9%97%A8%20|%20%E8%BD%BF%E5%8E%A2-blue" alt="Features"/></a>
-  &ensp;
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"/></a>
-  &ensp;
-  <img src="https://img.shields.io/badge/Three.js-r160-000000?logo=three.js&logoColor=white" alt="Three.js"/>
-  &ensp;
-  <img src="https://img.shields.io/badge/Vite-5.0+-646CFF?logo=vite&logoColor=white" alt="Vite"/>
 </p>
 
 ---
