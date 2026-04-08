@@ -41,7 +41,7 @@
 1. 克隆仓库
 
 ```bash
-git clone https://github.com/yourusername/elevator-3d.git
+git clone https://github.com/Zhetao-Wang/elevator-3d.git
 cd elevator-3d
 ```
 
@@ -155,6 +155,10 @@ class MyComponent extends BaseComponent {
 3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
 4. 推送到分支 (`git push origin feature/AmazingFeature`)
 5. 创建 Pull Request
+
+## ⭐ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Zhetao-Wang/elevator-3d&type=Date)](https://star-history.com/#Zhetao-Wang/elevator-3d&Date)
 
 ## 📄 许可证
 
