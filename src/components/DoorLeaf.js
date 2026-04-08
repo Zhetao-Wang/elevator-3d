@@ -11,12 +11,12 @@ export class DoorLeaf extends BaseComponent {
         this.models = {
             standard: {
                 name: '标准型',
-                width: 1.7,
-                height: 2.4,
-                doorWidth: 0.845,
-                doorHeight: 2.4,
-                thickness: 0.05,
-                gap: 0.01
+                width: 1.25,       // 与小门套内宽完全贴合
+                height: 2.40,      // 高度略低于小门套
+                doorWidth: 0.622,  // 单扇门宽度，左右无间隙
+                doorHeight: 2.40,
+                thickness: 0.04,
+                gap: 0.006          // 很小的中间间隙
             }
         };
 
@@ -95,6 +95,11 @@ export class DoorLeaf extends BaseComponent {
         const halfGap = model.gap / 2;
         this.leftDoorGroup.position.set(-halfGap, -0.025, 0);
         this.rightDoorGroup.position.set(halfGap, -0.025, 0);
+
+        // 设置位置 - 层门在小门套内，稍微靠后
+        const doorZ = 0.06;
+        this.leftDoorGroup.position.set(-halfGap, -0.025, doorZ);
+        this.rightDoorGroup.position.set(halfGap, -0.025, doorZ);
 
         // 添加到场景
         this.scene.add(this.leftDoorGroup);

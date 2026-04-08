@@ -54,8 +54,8 @@ export class CallBox extends BaseComponent {
         this.callBoxGroup.name = 'CallBox';
 
         // 面板主体
-        const panelWidth = 0.3;
-        const panelHeight = 0.7;
+        const panelWidth = 0.2;
+        const panelHeight = 0.6;
         const panelDepth = 0.04;
 
         const panelGeo = new THREE.BoxGeometry(panelWidth, panelHeight, panelDepth);
@@ -65,7 +65,7 @@ export class CallBox extends BaseComponent {
         this.callBoxGroup.add(panelMesh);
 
         // 显示器区域（黑色玻璃）
-        const glassGeo = new THREE.BoxGeometry(panelWidth - 0.06, 0.21, 0.01);
+        const glassGeo = new THREE.BoxGeometry(0, 0, 0);
         const glassMat = new THREE.MeshPhysicalMaterial({
             color: 0x000000,
             metalness: 0.2,
@@ -77,29 +77,29 @@ export class CallBox extends BaseComponent {
         this.callBoxGroup.add(glassMesh);
 
         // 创建楼层显示
-        this.createDisplay();
+        this.createDisplay(panelWidth, panelDepth);
 
         // 按钮区域
         const btnColor = this.buttonColors[this.currentButtonColor];
-        const btnYPositions = [-0.08, -0.22];
+        const btnYPositions = [-0.05, -0.18];
 
         btnYPositions.forEach((yPos, index) => {
             const btnGroup = new THREE.Group();
 
             if (this.currentButtonModel === 'circle') {
-                // 圆形按钮
-                const ringGeo = new THREE.TorusGeometry(0.06, 0.008, 16, 64);
+                // 圆形按钮 - 尺寸与面板匹配
+                const ringGeo = new THREE.TorusGeometry(0.04, 0.006, 16, 64);
                 const ringMat = new THREE.MeshStandardMaterial({
                     color: 0xcccccc,
                     metalness: 1.0,
                     roughness: 0.2
                 });
                 const ring = new THREE.Mesh(ringGeo, ringMat);
-                ring.position.z = panelDepth / 2 + 0.01;
+                ring.position.z = panelDepth / 2 + 0.008;
                 btnGroup.add(ring);
 
                 // 按钮本体
-                const btnGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.015, 32);
+                const btnGeo = new THREE.CylinderGeometry(0.03, 0.03, 0.012, 32);
                 const btnMat = new THREE.MeshStandardMaterial({
                     color: 0xcccccc,
                     metalness: 1.0,
@@ -107,44 +107,11 @@ export class CallBox extends BaseComponent {
                 });
                 const btn = new THREE.Mesh(btnGeo, btnMat);
                 btn.rotation.x = Math.PI / 2;
-                btn.position.z = panelDepth / 2 + 0.008;
-                btnGroup.add(btn);
-
-                // 发光圈
-                const glowGeo = new THREE.TorusGeometry(0.052, 0.005, 16, 64);
-                const glowMat = new THREE.MeshStandardMaterial({
-                    color: 0x111111,
-                    emissive: btnColor.emissive,
-                    emissiveIntensity: 0.8
-                });
-                const glow = new THREE.Mesh(glowGeo, glowMat);
-                glow.position.z = panelDepth / 2 + 0.015;
-                btnGroup.add(glow);
-            } else {
-                // 方形按钮
-                const frameGeo = new THREE.BoxGeometry(0.12, 0.12, 0.01);
-                const frameMat = new THREE.MeshStandardMaterial({
-                    color: 0xcccccc,
-                    metalness: 1.0,
-                    roughness: 0.2
-                });
-                const frame = new THREE.Mesh(frameGeo, frameMat);
-                frame.position.z = panelDepth / 2 + 0.005;
-                btnGroup.add(frame);
-
-                // 按钮本体
-                const btnGeo = new THREE.BoxGeometry(0.09, 0.09, 0.012);
-                const btnMat = new THREE.MeshStandardMaterial({
-                    color: 0xcccccc,
-                    metalness: 1.0,
-                    roughness: 0.2
-                });
-                const btn = new THREE.Mesh(btnGeo, btnMat);
                 btn.position.z = panelDepth / 2 + 0.006;
                 btnGroup.add(btn);
 
-                // 发光方块
-                const glowGeo = new THREE.BoxGeometry(0.1, 0.1, 0.005);
+                // 发光圈
+                const glowGeo = new THREE.TorusGeometry(0.035, 0.004, 16, 64);
                 const glowMat = new THREE.MeshStandardMaterial({
                     color: 0x111111,
                     emissive: btnColor.emissive,
@@ -153,19 +120,52 @@ export class CallBox extends BaseComponent {
                 const glow = new THREE.Mesh(glowGeo, glowMat);
                 glow.position.z = panelDepth / 2 + 0.012;
                 btnGroup.add(glow);
+            } else {
+                // 方形按钮 - 尺寸与面板匹配
+                const frameGeo = new THREE.BoxGeometry(0.08, 0.08, 0.008);
+                const frameMat = new THREE.MeshStandardMaterial({
+                    color: 0xcccccc,
+                    metalness: 1.0,
+                    roughness: 0.2
+                });
+                const frame = new THREE.Mesh(frameGeo, frameMat);
+                frame.position.z = panelDepth / 2 + 0.004;
+                btnGroup.add(frame);
+
+                // 按钮本体
+                const btnGeo = new THREE.BoxGeometry(0.06, 0.06, 0.01);
+                const btnMat = new THREE.MeshStandardMaterial({
+                    color: 0xcccccc,
+                    metalness: 1.0,
+                    roughness: 0.2
+                });
+                const btn = new THREE.Mesh(btnGeo, btnMat);
+                btn.position.z = panelDepth / 2 + 0.005;
+                btnGroup.add(btn);
+
+                // 发光方块
+                const glowGeo = new THREE.BoxGeometry(0.07, 0.07, 0.004);
+                const glowMat = new THREE.MeshStandardMaterial({
+                    color: 0x111111,
+                    emissive: btnColor.emissive,
+                    emissiveIntensity: 0.8
+                });
+                const glow = new THREE.Mesh(glowGeo, glowMat);
+                glow.position.z = panelDepth / 2 + 0.01;
+                btnGroup.add(glow);
             }
 
             btnGroup.position.y = yPos;
             this.callBoxGroup.add(btnGroup);
         });
 
-        // 设置位置（门右侧墙壁）
-        this.callBoxGroup.position.set(1.5, 0.3, 0.3);
+        // 设置位置（大门套右侧墙壁上，与大门套前面平齐）
+        this.callBoxGroup.position.set(1.1, 0.3, 0.22);
 
         this.scene.add(this.callBoxGroup);
     }
 
-    createDisplay() {
+    createDisplay(panelWidth, panelDepth) {
         const model = {
             bgColor: '#000000',
             textColor: this.currentDisplayModel === 'seg-white' ? '#ffffff' : '#ff0000'
@@ -180,13 +180,13 @@ export class CallBox extends BaseComponent {
         ctx.fillStyle = model.bgColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // 数字
+        // 数字 - 调整字体大小匹配面板
         ctx.fillStyle = model.textColor;
-        ctx.font = 'bold 40px "Courier New", monospace';
+        ctx.font = 'bold 36px "Courier New", monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.shadowColor = model.textColor;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 6;
         ctx.fillText('01', canvas.width / 2, canvas.height / 2);
 
         if (this.texture) {
@@ -194,7 +194,10 @@ export class CallBox extends BaseComponent {
         }
         this.texture = new THREE.CanvasTexture(canvas);
 
-        const screenGeo = new THREE.PlaneGeometry(0.22, 0.11);
+        // 显示器尺寸与面板宽度匹配
+        const displayWidth = panelWidth * 0.8;
+        const displayHeight = displayWidth * 0.5;
+        const screenGeo = new THREE.PlaneGeometry(displayWidth, displayHeight);
         const screenMat = new THREE.MeshBasicMaterial({
             map: this.texture,
             transparent: true
@@ -205,7 +208,7 @@ export class CallBox extends BaseComponent {
         }
 
         this.displayMesh = new THREE.Mesh(screenGeo, screenMat);
-        this.displayMesh.position.set(0, 0.15, 0.04);
+        this.displayMesh.position.set(0, 0.12, panelDepth / 2 + 0.008);
         this.callBoxGroup.add(this.displayMesh);
     }
 

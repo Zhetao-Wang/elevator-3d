@@ -7,11 +7,12 @@ export class DoorFrame extends BaseComponent {
         super(scene, '大门套', 'doorFrame');
         this.materialLibrary = materialLibrary;
         this.dimensions = {
-            width: 2.2,
-            height: 2.7,
-            depth: 0.15,
-            wallThickness: 0.08
+            width: 1.55,  // 内框宽度与小门套匹配 (1.35 + 两边壁厚)
+            height: 2.55, // 内框高度与小门套匹配
+            depth: 0.30,  // 大门套前后很宽
+            wallThickness: 0.10
         };
+        this.zOffset = 0.12;  // 大门套往前超出的距离（更靠前）
         this.currentMaterial = 'st-hairline';
         this.meshes = [];
     }
@@ -97,6 +98,9 @@ export class DoorFrame extends BaseComponent {
         rightTrim.userData.componentRef = this;
         this.meshes.push(rightTrim);
         this.frameGroup.add(rightTrim);
+
+        // 设置位置 - 大门套往前超出
+        this.frameGroup.position.z = this.zOffset;
 
         // 添加到场景
         this.scene.add(this.frameGroup);

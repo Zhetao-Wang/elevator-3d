@@ -7,11 +7,12 @@ export class InnerFrame extends BaseComponent {
         super(scene, '小门套', 'innerFrame');
         this.materialLibrary = materialLibrary;
         this.dimensions = {
-            width: 1.9,
-            height: 2.5,
-            depth: 0.1,
-            wallThickness: 0.06
+            width: 1.35,  // 与层门匹配，左右间隙小
+            height: 2.45,
+            depth: 0.06,  // 较薄
+            wallThickness: 0.05
         };
+        this.zPosition = 0.12;  // 小门套与大门套前面贴合（大门套zOffset=0.12）
         this.currentMaterial = 'st-hairline';
         this.meshes = [];
     }
@@ -60,6 +61,9 @@ export class InnerFrame extends BaseComponent {
         rightMesh.userData.componentRef = this;
         this.meshes.push(rightMesh);
         this.innerGroup.add(rightMesh);
+
+        // 设置位置 - 小门套靠前
+        this.innerGroup.position.z = this.zPosition;
 
         // 添加到场景
         this.scene.add(this.innerGroup);

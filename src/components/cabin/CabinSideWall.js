@@ -2,18 +2,27 @@ import * as THREE from 'three';
 import { BaseComponent } from '../BaseComponent.js';
 
 /**
- * 轿厢吊顶组件
+ * 轿厢侧壁组件
+ * 分为前、中、后三块，每块可独立配置材质
+ * 平整的薄片墙面
  */
-export class CabinCeiling extends BaseComponent {
-    constructor(scene, materialLibrary) {
-        super(scene, '吊顶', 'cabin.ceiling');
+export class CabinSideWall extends BaseComponent {
+    constructor(scene, materialLibrary, side, position, name) {
+        super(scene, name, `cabin.sideWall.${side}.${position}`);
         this.materialLibrary = materialLibrary;
+        this.side = side; // 'left' | 'right'
+        this.position = position; // 'front' | 'middle' | 'rear'
         this.meshes = [];
         this.currentMaterial = 'st-hairline';
+
+        // 尺寸
+        this.wallHeight = 2.4;
+        this.wallThickness = 0.02; // 薄片墙面
+        this.sectionDepth = 2.0 / 3; // 侧壁深度分成3块
     }
 
     create() {
-        this.mesh = this._createCeilingMesh();
+        this.mesh = this._createWallMesh();
         this.meshes = this.mesh ? [this.mesh] : [];
         if (this.mesh) {
             this.addToScene();
@@ -21,18 +30,28 @@ export class CabinCeiling extends BaseComponent {
         }
     }
 
-    _createCeilingMesh() {
+    _createWallMesh() {
         const group = new THREE.Group();
 
-        // 基础吊顶 - 平整薄片
-        const baseGeometry = new THREE.BoxGeometry(2.0, 0.02, 2.0);
-        const baseMesh = new THREE.Mesh(baseGeometry, null);
-        baseMesh.position.set(0, 2.39, 0);
-        baseMesh.userData.componentRef = this;
-        baseMesh.userData.partType = 'base';
-        group.add(baseMesh);
+        // 计算位置
+        const xPos = this.side === 'left' ? -1.0 : 1.0;
+        const zOffset = -1.0 + (this.position === 'front' ? 0 : this.position === 'middle' ? 1 : 2) * this.sectionDepth;
+        const zPos = zOffset + this.sectionDepth / 2;
 
+        // 主体壁板 - 平整薄片
+        const panel = new THREE.Mesh(
+            new THREE.BoxGeometry(this.wallThickness, this.wallHeight, this.sectionDepth),
+            null
+        );
+        panel.position.set(0, this.wallHeight / 2, 0);
+        panel.userData.componentRef = this;
+        panel.userData.partType = 'panel';
+        group.add(panel);
+
+        // 设置整体位置
+        group.position.set(xPos, 0, zPos);
         group.userData.componentRef = this;
+
         return group;
     }
 
@@ -44,7 +63,7 @@ export class CabinCeiling extends BaseComponent {
 
         if (this.mesh) {
             this.mesh.traverse((child) => {
-                if (child.isMesh) {
+                if (child.isMesh && child.userData.partType === 'panel') {
                     child.material = material.clone();
                 }
             });
@@ -59,6 +78,8 @@ export class CabinCeiling extends BaseComponent {
         return {
             name: this.name,
             configKey: this.configKey,
+            side: this.side,
+            position: this.position,
             material: this.currentMaterial
         };
     }
@@ -78,4 +99,4 @@ export class CabinCeiling extends BaseComponent {
     }
 }
 
-export default CabinCeiling;
+export default CabinSideWall;

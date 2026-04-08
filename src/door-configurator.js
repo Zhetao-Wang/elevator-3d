@@ -6,7 +6,6 @@ import { MaterialLibrary } from './materials/MaterialLibrary.js';
 import { DoorFrame } from './components/DoorFrame.js';
 import { InnerFrame } from './components/InnerFrame.js';
 import { DoorLeaf } from './components/DoorLeaf.js';
-import { FloorDisplay } from './components/FloorDisplay.js';
 import { CallBox } from './components/CallBox.js';
 
 // EventBus 实现
@@ -90,7 +89,7 @@ export class DoorConfigurator {
     _initScene() {
         // 场景
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x1a1a1a);
+        this.scene.background = new THREE.Color(0xffffff);
 
         // 相机
         this.camera = new THREE.PerspectiveCamera(
@@ -148,11 +147,6 @@ export class DoorConfigurator {
         const doorLeaf = new DoorLeaf(this.scene, this.materialLibrary);
         doorLeaf.create();
         this.components.set('doorLeaf', doorLeaf);
-
-        // 楼层显示器
-        const floorDisplay = new FloorDisplay(this.scene);
-        floorDisplay.create();
-        this.components.set('floorDisplay', floorDisplay);
 
         // 召唤盒
         const callBox = new CallBox(this.scene, this.materialLibrary);
