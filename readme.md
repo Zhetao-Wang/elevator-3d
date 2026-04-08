@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="assets/logo.png" width="180" alt="3D Elevator Configurator"/>
-</p>
+
 
 <h1 align="center">3D 电梯配置器</h1>
 
