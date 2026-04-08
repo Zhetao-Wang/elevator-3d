@@ -1,5 +1,7 @@
 
 
+[中文](README.md) | [English](README_EN.md)
+
 <h1 align="center">3D 电梯配置器</h1>
 
 <p align="center">
